@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Parent</title>
+	<script src="../node_modules/requirejs/require.js"></script>
+	<script>
+		requirejs.config({
+		    baseUrl: '../lib',
+		    paths: {
+		        src: '../src'
+		    }
+		});
+		require(["src/xd-channel"], function(channel) {
+			var c = channel.createChannel({
+				target:document.getElementById("iframe"),
+				domain:"http://localhost:8081",
+				targetUrl:"/xd-channel/test/child.html",
+				receiveCallback:function(evt){
+					var n = document.getElementById("node");
+					n.innerHTML=n.innerHTML+"<div>Received: "+evt.data+"</div>";
+				}
+			});
+			var count = 1;
+			setInterval(function(){
+				var msg = "Message to child "+count;
+				var n = document.getElementById("node");
+					n.innerHTML=n.innerHTML+"<div>Sending: "+msg+"</div>";
+				c.post({value:msg,count:count});
+				count++;
+			},1000);
+		});
+	</script>
+
+</head>
+<body>
+
+	<iframe id="iframe" src="http://localhost:8081/xd-channel/test/child.html"></iframe>
+	<div id="node"></div>
+</body>
+</html>

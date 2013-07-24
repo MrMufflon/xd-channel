@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Child</title>
+	<script src="../node_modules/requirejs/require.js"></script>
+	<script>
+		requirejs.config({
+		    baseUrl: '../lib',
+		    paths: {
+		        src: '../src'
+		    }
+		});
+		require(["src/xd-channel"], function(channel) {
+			var c = channel.createChannel({
+				target:window.parent,
+				domain:"http://localhost:8080",
+				targetUrl:"/xd-channel/test/parent.html",
+				receiveCallback:function(evt){
+					var msg = "Echo to parent: ";
+					var n = document.getElementById("node");
+					n.innerHTML=n.innerHTML+"<div>Received: "+evt.data.value+"</div>";
+					if (evt.data.count>2){
+						msg+="Releasing channel!";
+						n.innerHTML=n.innerHTML+"<div>Sending: "+msg+"</div>";
+						this.post(msg);
+						this.destroy();
+					}else {
+						msg+="Hello!"
+						n.innerHTML=n.innerHTML+"<div>Sending: "+msg+"</div>";
+						this.post(msg);
+					}
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="node"></div>
+</body>
+</html>

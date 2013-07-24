@@ -1,0 +1,22 @@
+{
+  "name": "xd-channel",
+  "version": "0.0.1",
+  "description": "communication between cross domain iframes in javascript",
+  "devDependencies": {
+    "requirejs": "~2.1.8"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrMufflon/xd-channel.git"
+  },
+  "keywords": [
+    "xd",
+    "cross domain"
+  ],
+  "author": "Felix Bache",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/MrMufflon/xd-channel/issues"
+  }
+}
