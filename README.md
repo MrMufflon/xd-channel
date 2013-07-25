@@ -11,6 +11,9 @@ Supported data types:
 
 ### Usage
 ```javascript
+Create a channel to the given target and domain. 
+Define a callback function to receive messages from that target (optional).
+Invoke channel.post() to post data to target.
 require(["xd-channel"], function(channel) {
 var c = channel.createChannel({
 	//target, optional, default window.parent

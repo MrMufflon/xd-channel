@@ -16,21 +16,22 @@ define(["json2"], function() {
 				_lastHash: "",
 
 				init: function() {
-					this._cb = this.receive.bind(this);
-					this.receiveCallback.bind(this.cbScope);
 					if (window.postMessage) {
 						this._hasPostMessage = true;
 					}
-					if (this._hasPostMessage) {
-						if (window["addEventListener"]) {
-							window["addEventListener"]("message", this._cb, false);
+					if (this.receiveCallback) {
+						this._cb = this.receive.bind(this);
+						this.receiveCallback.bind(this.cbScope);
+						if (this._hasPostMessage) {
+							if (window["addEventListener"]) {
+								window["addEventListener"]("message", this._cb, false);
+							} else {
+								window["attachEvent"]("onmessage", this._cb);
+							}
 						} else {
-							window["attachEvent"]("onmessage", this._cb);
+							this._pollTimer = setInterval(this._pollMessage.bind(this), this.pollInterval);
 						}
-					} else {
-						this._pollTimer = setInterval(this._pollMessage.bind(this), this.pollInterval);
 					}
-
 				},
 
 				_pollMessage: function() {
@@ -39,7 +40,7 @@ define(["json2"], function() {
 						var url = document.location.href,
 							cachebuster = /^#?\d+&/;
 						url = url.replace(/#.*$/, "");
-						if (!hash || !hash.length > 0) {
+						if (!hash || hash.length === 0) {
 							return;
 						}
 						this._lastHash = hash;
